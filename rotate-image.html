@@ -1,0 +1,33 @@
+#rotate-div {
+  width: 100px;
+  height: 100px;
+  background-color: lightblue;
+  text-align: center;
+  line-height: 100px;
+  user-select: none; /* prevent text selection */
+}
+const div = document.querySelector("#rotate-div");
+let angle = 0;
+
+div.addEventListener("mousedown", function(event) {
+  const startX = event.clientX;
+  const startY = event.clientY;
+  const divRect = div.getBoundingClientRect();
+  const centerX = divRect.left + divRect.width / 2;
+  const centerY = divRect.top + divRect.height / 2;
+
+  function onMouseMove(moveEvent) {
+    const angleRad = Math.atan2(moveEvent.clientY - centerY, moveEvent.clientX - centerX);
+    angle = angleRad * 180 / Math.PI;
+    div.style.transform = `rotate(${angle}deg)`;
+  }
+
+  function onMouseUp() {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+  }
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+});
+<div id="rotate-div">Rotate Me</div>
